@@ -18,8 +18,25 @@
 
       packages = mkOutput (
         { pkgs }:
+        let
+          duckdb = pkgs.callPackage ./default.nix { };
+        in
         {
-          default = pkgs.callPackage ./default.nix { };
+          # pplanel/ghola's build: no JDBC, only the extensions it loads.
+          # The only package here, because pplanel/nixcache's publish
+          # workflow builds every package of the flake into the GHCR cache,
+          # and upstream's default (JDBC, httpfs, gcs) is a long build
+          # nothing here uses.
+          ghola = duckdb.mkDuckdb {
+            extensions = with duckdb.extensions; [
+              core_functions
+              icu
+              json
+              parquet
+              fts
+            ];
+            withJdbc = false;
+          };
         }
       );
     };

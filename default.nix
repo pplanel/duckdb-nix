@@ -67,7 +67,7 @@ let
 in
 scope.default.overrideAttrs (previousAttrs: {
   passthru = (previousAttrs.passthru or { }) // {
-    inherit (scope) withExtensions mkExtension extensions defaultExtensions;
+    inherit (scope) withExtensions mkDuckdb mkExtension extensions defaultExtensions;
 
     src = scope.duckdb-src;
     core = scope.duckdb-core;

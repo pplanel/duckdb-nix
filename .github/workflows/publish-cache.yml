@@ -1,0 +1,21 @@
+name: Publish Binary Cache
+
+# Builds this flake's aarch64-darwin packages (the `ghola` DuckDB) and pushes
+# the signed NARs to ghcr.io/pplanel/duckdb-nix/nix-cache, so the Macs
+# download DuckDB instead of compiling it. The build logic lives once in
+# pplanel/nixcache as a reusable workflow; this is the thin caller.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["*.md"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    uses: pplanel/nixcache/.github/workflows/publish-cache.yml@main
+    secrets: inherit
