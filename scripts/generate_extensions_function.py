@@ -735,10 +735,12 @@ Please double check if '{args.extension_repository}' is the right location to lo
         print(" > autoloadable_extensions:  " + str(len(parsed_entries.autoloadable_extensions)))
 
     def verify_export(self):
-        if len(self.function_map) == 0 or len(self.settings_map) == 0 or len(self.secret_types_map) == 0:
+        # secret_types_map may legitimately be empty: only httpfs, aws, azure,
+        # mysql_scanner, postgres_scanner and similar register secret types.
+        if len(self.function_map) == 0 or len(self.settings_map) == 0:
             print(
                 """
-The provided configuration produced an empty function map or empty settings map or empty secret types map
+The provided configuration produced an empty function map or empty settings map
 This is likely caused by building DuckDB with extensions linked in
 """
             )
